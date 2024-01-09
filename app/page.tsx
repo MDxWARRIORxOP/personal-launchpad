@@ -1,95 +1,136 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import {
+  Button,
+  TextField,
+  Box,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Divider,
+  IconButton,
+} from "@mui/material";
+import { ArrowForward } from "@mui/icons-material";
+import React, { ElementRef, useRef } from "react";
+
+const LINKS = [
+  {
+    url: "https://youtube.com",
+    title: "Youtube",
+  },
+  {
+    url: "http://chat.openai.com",
+    title: "Chat GPT",
+  },
+  {
+    url: "https://github.com/MDxWARRIORxOP",
+    title: "My Github",
+  },
+  {
+    url: "https://canva.com",
+    title: "Canva",
+  },
+  {
+    url: "http://localhost:3s000",
+    title: "Localhost",
+  },
+  { url: "https://console.firebase.google.com", title: "Firebase" },
+  {
+    url: "https://stackoverflow.com",
+    title: "Stack Overflow",
+  },
+  {
+    url: "https://replit.com",
+    title: "Replit",
+  },
+  {
+    url: "https://dash.cloudflare.com",
+    title: "Cloudflare",
+  },
+  {
+    url: "https://fontawesome.com",
+    title: "Font Awesome",
+  },
+];
 
 export default function Home() {
+  const linkRef = useRef<ElementRef<"a">>(null);
+
+  function handleUrlRedirect(e: React.SyntheticEvent<ElementRef<"form">>) {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    console.log(data.get("url"));
+
+    if (linkRef.current) {
+      linkRef.current.href = data.get("url")?.toString() as string;
+      linkRef.current.click();
+    }
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+    <>
+      <a href="" ref={linkRef} target="_blank" rel="noopener noreferrer" />
+      <header>
+        <h1 className="center">Hey There!</h1>
+      </header>
+      <main>
+        <section className="center" style={{ padding: "15px" }}>
+          <Box component={"form"} onSubmit={handleUrlRedirect}>
+            <TextField
+              name="url"
+              type="url"
+              sx={{
+                input: { color: "white", borderBottom: "1px solid white" },
+              }}
+              id="url"
+              variant="standard"
+              placeholder="URL"
             />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+          </Box>
+        </section>
+        <section>
+          <Box>
+            <List>
+              {LINKS.map((link, index) => (
+                <>
+                  <ListItem
+                    key={index}
+                    secondaryAction={
+                      <IconButton edge="end">
+                        <ArrowForward sx={{ color: "white" }} />
+                      </IconButton>
+                    }
+                    data-url={link.url}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (linkRef.current) {
+                        linkRef.current.href = e.currentTarget.dataset
+                          .url as string;
+                        linkRef.current.click();
+                      }
+                    }}
+                  >
+                    <ListItemButton>
+                      <p>
+                        <strong style={{ fontSize: "18px" }}>
+                          {link.title}
+                        </strong>
+                        <br />{" "}
+                        <span style={{ fontSize: "14px" }}>{link.url}</span>
+                      </p>
+                    </ListItemButton>
+                  </ListItem>
+                  <Divider
+                    variant="middle"
+                    component={"li"}
+                    sx={{ bgcolor: "white" }}
+                  />
+                </>
+              ))}
+            </List>
+          </Box>
+        </section>
+      </main>
+    </>
+  );
 }
