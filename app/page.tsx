@@ -88,6 +88,7 @@ export default function Home() {
             />
           </Box>
         </section>
+        <Divider sx={{ bgcolor: "grey" }} />
         <section>
           <Box>
             <List>
