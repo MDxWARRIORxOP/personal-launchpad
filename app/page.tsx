@@ -19,7 +19,7 @@ const LINKS = [
     title: "Youtube",
   },
   {
-    url: "http://chat.openai.com",
+    url: "https://chat.openai.com",
     title: "Chat GPT",
   },
   {
@@ -31,7 +31,7 @@ const LINKS = [
     title: "Canva",
   },
   {
-    url: "http://localhost:3s000",
+    url: "http://localhost:3000",
     title: "Localhost",
   },
   { url: "https://console.firebase.google.com", title: "Firebase" },
@@ -59,10 +59,15 @@ export default function Home() {
   function handleUrlRedirect(e: React.SyntheticEvent<ElementRef<"form">>) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
-    console.log(data.get("url"));
+    console.log(data.get("search"));
 
     if (linkRef.current) {
-      linkRef.current.href = data.get("url")?.toString() as string;
+      const query = data.get("search")?.toString() as string;
+
+      if (query.startsWith(":"))
+        linkRef.current.href = "https://" + query.substring(2);
+      else linkRef.current.href = "https://google.com/search?q=" + query;
+
       linkRef.current.click();
     }
   }
@@ -77,14 +82,16 @@ export default function Home() {
         <section className="center" style={{ padding: "15px" }}>
           <Box component={"form"} onSubmit={handleUrlRedirect}>
             <TextField
-              name="url"
-              type="url"
+              name="search"
               sx={{
                 input: { color: "white", borderBottom: "1px solid white" },
               }}
               id="url"
+              type="search"
               variant="standard"
-              placeholder="URL"
+              autoComplete="off"
+              autoFocus
+              placeholder="Search"
             />
           </Box>
         </section>
